@@ -35,11 +35,14 @@ public class Medico {
     @Embedded
     private Endereço endereço;
 
+    private String telefone;
+
     public Medico(DadosCadastroMedico dados) {
         this.nome = dados.nome();
         this.crm = dados.crm();
         this.email = dados.email();
         this.endereço = new Endereço(dados.endereço());
         this.especialidade = dados.especialidade();
+        this.telefone =  dados.telefone();
     }
 }

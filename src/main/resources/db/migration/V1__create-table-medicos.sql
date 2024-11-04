@@ -12,6 +12,7 @@ create table medicos(
     uf char(2) not null,
     cidade varchar(100) not null ,
 
+
     primary key (id)
 
 
