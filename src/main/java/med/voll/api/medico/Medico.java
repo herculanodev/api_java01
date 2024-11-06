@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.endereço.Endereço;
 
+import java.util.Optional;
+
 @Table(name = "medicos")
 @Entity(name = "Medico")
 @Getter
@@ -37,6 +39,9 @@ public class Medico {
 
     private String telefone;
 
+    private Boolean ativo;
+
+
     public Medico(DadosCadastroMedico dados) {
         this.nome = dados.nome();
         this.crm = dados.crm();
@@ -44,5 +49,18 @@ public class Medico {
         this.endereço = new Endereço(dados.endereço());
         this.especialidade = dados.especialidade();
         this.telefone =  dados.telefone();
+        this.ativo = true;
+    }
+
+    public void atualizarInformacoes(DadosAtualizacaoMedico dados) {
+        Optional.ofNullable(dados.nome()).ifPresent(nome -> this.nome = nome);
+        Optional.ofNullable(dados.telefone()).ifPresent(telefone -> this.telefone = telefone);
+        Optional.ofNullable(dados.endereço()).ifPresent(endereco -> this.endereço.atualizarInformacoes(endereco));
+    }
+
+
+    public void excluir() {
+        this.ativo = false;
+
     }
 }

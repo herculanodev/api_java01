@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,4 +33,15 @@ public class Endereço {
         this.complemento = dados.complemento();
         this.numero = dados.numero();
     }
+
+    public void atualizarInformacoes(DadosEndereço dados) {
+        Optional.ofNullable(dados.logradouro()).ifPresent(logradouro -> this.logradouro = logradouro);
+        Optional.ofNullable(dados.bairro()).ifPresent(bairro -> this.bairro = bairro);
+        Optional.ofNullable(dados.cep()).ifPresent(cep -> this.cep = cep);
+        Optional.ofNullable(dados.cidade()).ifPresent(cidade -> this.cidade = cidade);
+        Optional.ofNullable(dados.uf()).ifPresent(uf -> this.uf = uf);
+        Optional.ofNullable(dados.complemento()).ifPresent(complemento -> this.complemento = complemento);
+        Optional.ofNullable(dados.numero()).ifPresent(numero -> this.numero = numero);
+    }
+
 }
