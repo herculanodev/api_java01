@@ -19,15 +19,14 @@ public class  MedicoController {
     @Autowired
     private MedicoRepository repository;
 
-        @PostMapping
-        @Transactional
-        public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder uriBuilder) {
-
-            var medico = new Medico(dados);
-            repository.save(new Medico(dados));
-            var uri = uriBuilder.path("medicos/{id}").buildAndExpand(medico.getId()).toUri();
-            return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
-        }
+    @PostMapping
+    @Transactional
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder uriBuilder) {
+        var medico = new Medico(dados);
+        repository.save(medico); // Salvando a mesma instância de medico
+        var uri = uriBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri(); // Corrigido o caminho da URI
+        return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
+    }
     @GetMapping
     public  ResponseEntity< Page<DadosListagemMedicos>> listar(@PageableDefault(size = 10, sort="nome") Pageable paginacao) {
         var page =  repository.findAllByIdTrue(paginacao).map(DadosListagemMedicos::new);
@@ -51,4 +50,10 @@ public class  MedicoController {
             medico.excluir();
             return ResponseEntity.noContent().build();
         }
+    @GetMapping("/{id}")
+    @Transactional
+    public ResponseEntity detalhar(@PathVariable Long id){
+        var medico = repository.getReferenceById(id);
+        return ResponseEntity.ok(new DadosDetalhamentoMedico(medico));
+    }
 }
